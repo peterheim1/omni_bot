@@ -1,2 +1,4 @@
 # omni_bot
-omni ver 4
+ROS2 package for omni_bot
+a holominic drive robot using swerve moduals
+
