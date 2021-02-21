@@ -134,15 +134,15 @@ int runCommand() {
   switch(cmd) {
   case POSITION://a
     // Reset the auto stop timer 
-    lastMotorCommand = millis();
-    if (arg1 == 0 ) {
-      Setpoint = 0;
-      Prevticks;
-      moving = 0;
-    }
-    else moving = 1;
+    //lastMotorCommand = millis();
+    ///if (arg1 == 0 ) {
+      //Setpoint = 0;
+      //Prevticks;
+      //moving = 0;
+    //}
+    //else moving = 1;
 
-    Setpoint = arg1;
+    right_power = arg1;
     Serial.println(arg1);
     Serial.println("OK");
     
