@@ -4,8 +4,10 @@
 #include <Messenger.h>
 // Instantiate Messenger object with the message function and the default separator (the space character)
 Messenger _Messenger = Messenger();
-
+//steering variables
 int fr_s, fl_s,rl_s,rr_s;
+//drive variables
+int fr_d, fl_d,rl_d,rr_d;
 byte a1 = 0;
 byte b1 = 0;
 int period = 100; //10 hz
@@ -74,6 +76,44 @@ void OnMssageCompleted()
    SetTarget(8, b);
    SetTarget(5, c);
    SetTarget(2, d);
+    return;
+
+  }
+
+  if (_Messenger.checkString("d"))
+  {
+    //Set wheel angle
+   int a = _Messenger.readInt();
+   int b = _Messenger.readInt();
+   int c = _Messenger.readInt();
+   int d = _Messenger.readInt();
+   SetTarget(7, a);// fl
+   SetTarget(3, b);// fr
+   SetTarget(4, c);// rl
+   SetTarget(6, d);// rr
+    return;
+
+  }
+
+  if (_Messenger.checkString("v"))
+  {
+    //Set wheel angle
+   int a = _Messenger.readInt();
+   int b = _Messenger.readInt();
+   int c = _Messenger.readInt();
+   int d = _Messenger.readInt();
+   int e = _Messenger.readInt();
+   int f = _Messenger.readInt();
+   int g = _Messenger.readInt();
+   int h = _Messenger.readInt();
+   SetTarget(8, a);// fl
+   SetTarget(9, b);// fr
+   SetTarget(2, c);// rl
+   SetTarget(5, d);// rr
+   SetTarget(7, e);// fl
+   SetTarget(3, f);// fr
+   SetTarget(4, g);// rl
+   SetTarget(6, h);// rr
     return;
 
   }

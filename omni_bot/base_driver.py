@@ -18,7 +18,7 @@ class BaseDriver(Node):
         self.get_logger().info('starting arduino control')
         
         
-        self._SerialDataGateway = SerialDataGateway("/dev/ttyUSB0", 115200,  self._HandleReceivedLine)
+        self._SerialDataGateway = SerialDataGateway("/dev/ttyACM0", 115200,  self._HandleReceivedLine)
         #self.rosNow = Node.get_clock().now().to_msg()
         #quaternion = Quaternion()
         self.Start()
