@@ -18,7 +18,7 @@ class BaseDriver(Node):
         self.get_logger().info('starting arduino control')
         
         
-        self._SerialDataGateway = SerialDataGateway("/dev/ttyUSB0", 115200,  self._HandleReceivedLine)
+        self._SerialDataGateway = SerialDataGateway("/dev/ttyAMC0", 115200,  self._HandleReceivedLine)
         #self.rosNow = Node.get_clock().now().to_msg()
         #quaternion = Quaternion()
         self.Start()
@@ -84,21 +84,21 @@ class BaseDriver(Node):
         #self.get_logger().info("rear angles: " + str(Rear_left) +     "  " + str(Rear_right))
         self.get_logger().info("front speed: " + str(V_F_R) +     "  " + str(V_F_L))
         self.get_logger().info("rear speed: " + str(V_R_L) +     "  " + str(V_R_R))
-        #message = 's %.2f %.2f\r' % (v_des_left, v_des_right)
-        #self._WriteSerial(message)
+        message = 's %d %d %d %d %d %d %d %d\r' % (Front_left, Front_right, Rear_left, Rear_right, V_F_L, V_F_R, V_R_L, V_R_R )
+        self._WriteSerial(message)
         
     def Start(self):
         #self.get_logger().info("Starting start function but wait")
         #print('in start')
         self._SerialDataGateway.Start()
-        message = 's \r'
+        message = 'x \r'
         self._WriteSerial(message)
         
     def Stop(self):
         self.get_logger().info("Stopping")
-        message = 'r \r'
-        self._WriteSerial(message)
-        sleep(5)
+        #message = 'r \r'
+        #self._WriteSerial(message)
+        #sleep(5)
         self._SerialDataGateway.Stop()
         
     def _WriteSerial(self, message):
