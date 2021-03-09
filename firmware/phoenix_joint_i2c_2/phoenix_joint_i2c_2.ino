@@ -82,7 +82,7 @@ unsigned long time_now = 0;
 double Setpoint, Input, Output;
 
 //Specify the links and initial tuning parameters
-PID myPID(&Input, &Output, &Setpoint,1,0,0, DIRECT);
+PID myPID(&Input, &Output, &Setpoint,2,0,0, DIRECT);
 /* Variable initialization */
 int right_power = 0;
 int moving =0;
@@ -362,7 +362,7 @@ void loop() {
         float deltaT = (millis() - time_now)/10;
         time_now = millis(); 
         int rev = pulseIn(enc_pin, HIGH); //map(enc.read (), 0, 4095 , 4095, 0);// change this to invert function
-        angle = map(rev, 0, 4090, 0, 3600);
+        angle = map(rev, 0, 4090, 0, 360);
         Input = angle;
   b1 = lowByte(angle);// mapped_Right_Lift change to *10
   a1 = highByte(angle);
@@ -379,6 +379,8 @@ void loop() {
  Serial.print(Input);
   Serial.print("   ");
   Serial.println(Output);
+  //Serial.print("   ");
+  //Serial.println(rev);
   
   
   

@@ -38,15 +38,17 @@ double Kp = 10;
 double Ki = 5;
 double Kd = 0;
 int Ko = 50;//loop pid time
-
+int period = 100; //10 hz
+unsigned long time_now = 0;
 
 
 /* Serial port baud rate */
 
-Encoder encoder(3, 4);
+Encoder encoder(3, 4);// 3 2 for the odd board
 long ticks;
 long Prevticks;
 int distance;
+double velocity;
 String EncString;
 long cmds;
 
@@ -142,7 +144,7 @@ int runCommand() {
     //}
     //else moving = 1;
 
-    right_power = arg1;
+    Setpoint = arg1;
     Serial.println(arg1);
     Serial.println("OK");
     
@@ -359,11 +361,23 @@ void setup() {
    interval and check for auto-stop conditions.
 */
 void loop() {
-  
-  
+  //Timing loop
+  if(millis() > time_now + period){
+        float deltaT = (millis() - time_now)/10;
+        time_now = millis();     
+        ticks = encoder.read();
+        velocity = ((ticks - Prevticks) * 0.029007) * deltaT ;
+        Input = velocity;
+        myPID.Compute();
+        myPID.SetOutputLimits(-255 ,255);
+        right_power = Output;
+        Prevticks = ticks;
+  }
+ 
   motor();
 
-
+//ticks = encoder.read();
+Serial.println(velocity);
   //Ser_print();
  // Serial.write(mapped_Right_Lift);
   while (Serial.available() > 0) {
@@ -406,10 +420,10 @@ void loop() {
     }
   }
   
-     if (millis() > nextPID) {
-    updatePID();
-    nextPID += PID_INTERVAL;
-  }
+     //if (millis() > nextPID) {
+    //updatePID();
+   //nextPID += PID_INTERVAL;
+  //}
 
   //if ((millis() - lastMotorCommand) > AUTO_STOP_INTERVAL) {;
    // right_power = 0;
@@ -424,9 +438,9 @@ void updatePID() {
   distance = ticks *0.0489026718;
   EncString = String(ticks);
   Input = ticks - Prevticks;
-  //myPID.Compute();
-  //myPID.SetOutputLimits(-255 ,255);
-  //right_power = Output;
+  myPID.Compute();
+  myPID.SetOutputLimits(-255 ,255);
+  right_power = Output;
   //Serial.print(distance);
   //Serial.print("  ");
   //Serial.println(ticks);
@@ -474,7 +488,7 @@ void receiveEvent(int bytes)
       //Serial.print("Received: ");
       //Serial.print(x);
      // Serial.print("\n");
-      right_power = x;
+      Setpoint = x;
     }
   }
 }
